@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProductApi.Dtos.ProductDtos;
 using ProductApi.Entities;
 using ProductApi.Interfaces;
@@ -7,7 +8,7 @@ namespace ProductApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController(IProductService productService) : ControllerBase
+    public class ProductsController(IProductService productService, ILogger<ProductsController> logger) : ControllerBase
     {
         /// <summary>
         /// Barcha mahsulotlarni olish
@@ -15,6 +16,7 @@ namespace ProductApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAllProducts()
         {
+            logger.LogInformation("The request is received");
             var products = await productService.GetAllProductsAsync();
             return Ok(products.Select(p => new ProductReadDto
             {
@@ -33,6 +35,7 @@ namespace ProductApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductReadDto>> GetProductById(Guid id)
         {
+            logger.LogInformation("The request is received in GetProductById method");
             var product = await productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
 
@@ -53,6 +56,7 @@ namespace ProductApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductReadDto>> CreateProduct(ProductCreateDto dto)
         {
+            logger.LogInformation("The request is received in CreateProduct method");
             var product = new Product
             {
                 Name = dto.Name,
@@ -79,6 +83,7 @@ namespace ProductApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductReadDto>> UpdateProduct(Guid id, ProductUpdateDto dto)
         {
+            logger.LogInformation("THe request is received in UpdateProduct");
             var product = new Product
             {
                 Name = dto.Name,
@@ -106,6 +111,7 @@ namespace ProductApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(Guid id)
         {
+            logger.LogInformation("The request is received in DeleteProduct method");
             var deleted = await productService.DeleteProductAsync(id);
             if (!deleted) return NotFound();
 

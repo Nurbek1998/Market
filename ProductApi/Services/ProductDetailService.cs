@@ -4,18 +4,17 @@ using ProductApi.Interfaces;
 
 namespace ProductApi.Services
 {
-    public class ProductDetailService : IProductDetailService
+    public class ProductDetailService(AppDbContext dbContext, ILogger<ProductDetailService> logger) : IProductDetailService
     {
-        private readonly AppDbContext dbContext;
-
-        public ProductDetailService(AppDbContext dbContext)
+        public async Task<ProductDetail?> GetDetailsByProductIdAsync(Guid productId)
         {
-            this.dbContext = dbContext;
-        }
-
-        public async Task<ProductDetail> GetDetailsByProductIdAsync(Guid productId)
-        {
-            return await dbContext.ProductDetails.FirstOrDefaultAsync(d => d.ProductId == productId);
+            var productDetail = await dbContext.ProductDetails.FirstOrDefaultAsync(d => d.ProductId == productId);
+            if (productDetail == null)
+            {
+                logger.LogInformation("The data is getting by Id from database");
+                return default;
+            }
+            return productDetail;
         }
 
         public async Task<ProductDetail> CreateProductDetailAsync(Guid productId, ProductDetail detail)
@@ -25,10 +24,11 @@ namespace ProductApi.Services
 
             dbContext.ProductDetails.Add(detail);
             await dbContext.SaveChangesAsync();
+            logger.LogInformation("The data is creating in database");
             return detail;
         }
 
-        public async Task<ProductDetail> UpdateProductDetailAsync(Guid productId, ProductDetail detail)
+        public async Task<ProductDetail?> UpdateProductDetailAsync(Guid productId, ProductDetail detail)
         {
             var existingDetail = await dbContext.ProductDetails.FirstOrDefaultAsync(d => d.ProductId == productId);
             if (existingDetail == null) return null;
@@ -45,6 +45,7 @@ namespace ProductApi.Services
             existingDetail.CountryOfOrigin = detail.CountryOfOrigin;
 
             await dbContext.SaveChangesAsync();
+            logger.LogInformation("The data is updating from database");
             return existingDetail;
         }
 
@@ -55,6 +56,7 @@ namespace ProductApi.Services
 
             dbContext.ProductDetails.Remove(detail);
             await dbContext.SaveChangesAsync();
+            logger.LogInformation("The data is deleting from database");
             return true;
         }
     }

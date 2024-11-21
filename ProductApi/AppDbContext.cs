@@ -16,31 +16,6 @@ namespace ProductApi
 
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; database=ProductDb; Trusted_Connection=true;");
         }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
 
-        //    // Product konfiguratsiyasi
-        //    modelBuilder.Entity<Product>(entity =>
-        //    {
-        //        entity.HasKey(e => e.Id);
-        //        entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-        //        entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
-        //        entity.Property(e => e.CreatedAt).HasDefaultValueSql("now");
-        //        entity.Property(e => e.ModifiedAt).HasDefaultValueSql("now()");
-        //    });
-
-        //    // ProductDetail konfiguratsiyasi
-        //    modelBuilder.Entity<ProductDetail>(entity =>
-        //    {
-        //        entity.HasKey(e => e.Id);
-        //        entity.Property(e => e.Description).HasMaxLength(500);
-        //        entity.Property(e => e.Weight);
-        //        entity.HasOne(e => e.Product)
-        //              .WithOne(p => p.ProductDetail)
-        //              .HasForeignKey<ProductDetail>(e => e.ProductId)
-        //              .OnDelete(DeleteBehavior.Cascade);
-        //    });
-        //}
     }
 }
