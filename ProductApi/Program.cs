@@ -2,6 +2,7 @@ using ProductApi.Interfaces;
 using ProductApi.Services;
 using ProductApi;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
